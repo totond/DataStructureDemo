@@ -1,12 +1,14 @@
 package com.datastructuredemo.Search;
 
-import org.w3c.dom.Node;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Stack;
 
 import com.datastructuredemo.ArrayUtils;
+import com.datastructuredemo.Tree.BinaryTree;
 
 /**
  * Created by yany on 2016/8/21.
@@ -364,6 +366,48 @@ public class BinarySortTree<T extends Comparable<T>> {
         }
     }
 
+    //层序遍历
+    /*
+        先将树的根节点入队，
+
+    如果队列不空，则进入循环
+
+    {
+
+      将队首元素出队，并输出它；
+
+      如果该队首元素有左孩子，则将其左孩子入队；
+
+      如果该队首元素有右孩子，则将其右孩子入队
+
+    }
+     */
+    private List levelTraverse(List<T> list,Node<T> root) {
+        if (root == null) {
+            return null;
+        }
+        Queue<Node<T>> queue = new LinkedList<Node<T>>();
+        queue.offer(root);
+        Node<T> current;
+        while (!queue.isEmpty()){
+            current = queue.poll();
+            list.add(current.value);
+            if (current.left != null){
+                queue.offer(current.left);
+            }
+            if (current.right != null){
+                queue.offer(current.right);
+            }
+        }
+        return list;
+    }
+
+    public List levelTraverse(){
+        List<T> list = new ArrayList<>();
+        levelTraverse(list,root);
+        return list;
+    }
+
     public static void main(String[] args) {
         BinarySortTree<Integer> binarySortTree = new BinarySortTree<>();
         binarySortTree.add(22);
@@ -378,6 +422,8 @@ public class BinarySortTree<T extends Comparable<T>> {
         ArrayUtils.printList(binarySortTree.preOrderTraverse());
         System.out.println("后序遍历：");
         ArrayUtils.printList(binarySortTree.postOrderTraverse());
+        System.out.println("层序遍历：");
+        ArrayUtils.printList(binarySortTree.levelTraverse());
         System.out.println("移除元素34" + binarySortTree.remove(34));
         ArrayUtils.printList(binarySortTree.inOrderTraverse());
     }
